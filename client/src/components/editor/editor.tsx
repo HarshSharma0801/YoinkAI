@@ -18,7 +18,6 @@ export function Editor({
   initialElements = [],
   initialConversationTurns = [],
 }: EditorProps) {
-
   const conversationElements = initialConversationTurns.map((turn, index) => ({
     id: `conversation-${turn.id}`,
     projectId,
@@ -52,7 +51,6 @@ export function Editor({
 
   const handleGenerationStarted = useCallback(
     (data: { elementId: string; type: string }) => {
-
       console.log("Generation started:", data);
     },
     []
@@ -99,7 +97,6 @@ export function Editor({
     socketClient.on("info", handleInfo);
 
     return () => {
-
       socketClient.off("textChunk", handleTextChunk);
       socketClient.off("generationStarted", handleGenerationStarted);
       socketClient.off("generationCompleted", handleGenerationCompleted);
@@ -118,7 +115,6 @@ export function Editor({
   ]);
 
   useEffect(() => {
-
     if (streamingText && !isProcessing) {
       const textElement: Element = {
         id: `text-${Date.now()}`,
@@ -176,7 +172,7 @@ export function Editor({
     <div className="h-screen flex flex-col bg-gray-50">
       {}
       <div className="bg-white border-b px-6 py-4">
-        <h1 className="text-xl font-semibold text-gray-900">Aether Editor</h1>
+        <h1 className="text-xl font-semibold text-gray-900">Yoink AI Editor</h1>
         <p className="text-sm text-gray-600">
           AI-powered script and scene creation
         </p>
@@ -192,7 +188,7 @@ export function Editor({
         <div className="max-w-4xl mx-auto px-6 py-8 bg-white min-h-full">
           {displayElements.length === 0 ? (
             <div className="text-center py-16 text-gray-500">
-              <p className="text-lg mb-2">Welcome to Aether Editor</p>
+              <p className="text-lg mb-2">Welcome to Yoink AI Editor</p>
               <p>
                 Start by asking me to write a scene, generate an image, or
                 create a video.
