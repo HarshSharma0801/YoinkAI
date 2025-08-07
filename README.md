@@ -15,6 +15,13 @@ Yoink AI is a Full-Stack web application that combines the power of OpenAI's GPT
 - ⚡ **Real-time Updates** - WebSocket-powered live collaboration
 - 📱 **Responsive Design** - Modern UI built with Next.js and Tailwind CSS
 
+##  Video
+
+
+https://github.com/user-attachments/assets/381a1fcd-29ed-467c-a411-ff687843efdd
+
+
+
 ## 🏗️ Architecture Overview
 
 ```mermaid
