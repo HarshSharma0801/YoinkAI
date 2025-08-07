@@ -19,54 +19,39 @@ Yoink AI is a Full-Stack web application that combines the power of OpenAI's GPT
 
 ```mermaid
 graph TD
-    subgraph "Frontend"
-        UI[/"Yoink AI UI"/]
-        Pages["Pages<br/>• Home<br/>• Project<br/>• Editor"]
-        Components["Components<br/>• Editor<br/>• Renderer"]
-        Socket["Socket.io"]
-        Axios["Axios"]
-        UI --> Pages --> Components --> Socket & Axios
-    end
+    %% Frontend Layer
+    A[Web UI] -->|renders| B[Editor Component]
+    A -->|renders| C[Renderer Component]
+    
+    %% Communication Layer
+    B -->|uses| D[WebSocket Client]
+    A -->|uses| E[HTTP Client]
+    
+    %% Backend Gateway
+    F[Server] -->|has| G[WebSocket Gateway]
+    F -->|has| H[REST API]
+    
+    %% Service Layer
+    G -->|communicates| I[AI Service]
+    H -->|manages| J[User Service]
+    H -->|manages| K[Project Service]
+    
+    %% External Connections
+    I -->|requests| L[OpenAI API]
+    K -->|uploads| M[Cloudinary API]
+    
+    %% Database Layer
+    J -->|queries| N[(PostgreSQL)]
+    K -->|queries| N
+    
+    %% Infrastructure
+    F -->|runs in| O[Docker Container]
+    N -->|hosted in| O
+    
+    %% Real-time Flow
+    D -->|connects to| G
+    E -->|requests to| H
 
-    subgraph "Backend"
-        Gateway["WebSocket"]
-        Services["Services<br/>• OpenAI<br/>• Users<br/>• Projects"]
-        Prisma["Prisma ORM"]
-        Cloudinary["Cloudinary"]
-        Gateway --> Services --> Prisma & Cloudinary
-    end
-
-    subgraph "External"
-        OpenAI["OpenAI API"]
-        CloudinaryAPI["Cloudinary API"]
-    end
-
-    subgraph "Database"
-        DB["PostgreSQL"]
-    end
-
-    subgraph "Infra"
-        Docker["Docker"]
-    end
-
-    Socket -->|"WebSocket"| Gateway
-    Axios -->|"REST"| Services
-    Services -->|"API"| OpenAI
-    Cloudinary -->|"API"| CloudinaryAPI
-    Prisma -->|"ORM"| DB
-    Docker --> DB
-
-    classDef frontend fill:#e1f5fe,stroke:#0288d1
-    classDef backend fill:#f3e5f5,stroke:#7b1fa2
-    classDef external fill:#fff3e0,stroke:#f57c00
-    classDef database fill:#e8f5e8,stroke:#388e3c
-    classDef infra fill:#fce4ec,stroke:#d81b60
-
-    class UI,Pages,Components,Socket,Axios frontend
-    class Gateway,Services,Prisma,Cloudinary backend
-    class OpenAI,CloudinaryAPI external
-    class DB database
-    class Docker infra
 ```
 
 ## 📋 Technical Stack
