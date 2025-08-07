@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects Project[]
+
+  @@map("users")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversationTurns ConversationTurn[]
+  elements          Element[]
+
+  @@map("projects")
+}
+
+model ConversationTurn {
+  id        String   @id @default(cuid())
+  projectId String
+  role      String 
+  content   String
+  toolCalls Json?
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("conversation_turns")
+}
+
+enum ElementType {
+  SCENE_HEADING
+  ACTION
+  CHARACTER
+  DIALOGUE
+  PARENTHETICAL
+  TRANSITION
+  IMAGE
+  VIDEO
+  TEXT
+}
+
+model Element {
+  id           String      @id @default(cuid())
+  projectId    String
+  type         ElementType
+  content      String
+  assetUrl     String?
+  isGenerating Boolean     @default(false)
+  order        Int
+  metadata     Json? 
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("elements")
+}
