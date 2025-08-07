@@ -2,7 +2,7 @@
 
 **AI-Powered Script Writing and Content Creation Platform**
 
-Yoink AI is a full-stack web application that combines the power of OpenAI's GPT-4 with advanced content generation capabilities. Create scripts, generate images, and produce videos through an intuitive chat-based interface.
+Yoink AI is a Full-Stack web application that combines the power of OpenAI's GPT-4 with advanced content generation capabilities. Create scripts, generate images, and produce videos through an intuitive chat-based interface.
 
 ## ✨ Features
 
@@ -18,95 +18,55 @@ Yoink AI is a full-stack web application that combines the power of OpenAI's GPT
 ## 🏗️ Architecture Overview
 
 ```mermaid
-graph TB
-    subgraph "Frontend (Next.js)"
-        UI[/"🖥️ Yoink AI Interface"/]
-        Pages["📄 Pages<br/>• Home Page<br/>• Project Page<br/>• Editor Interface"]
-        Components["🧩 Components<br/>• Editor<br/>• Element Renderer<br/>• UI Components"]
-        SocketClient["📡 Socket.io Client<br/>Real-time Communication"]
-        AxiosAPI["🌐 Axios HTTP Client<br/>REST API Calls"]
+graph TD
+    subgraph "Frontend"
+        UI[/"Yoink AI UI"/]
+        Pages["Pages<br/>• Home<br/>• Project<br/>• Editor"]
+        Components["Components<br/>• Editor<br/>• Renderer"]
+        Socket["Socket.io"]
+        Axios["Axios"]
+        UI --> Pages --> Components --> Socket & Axios
     end
 
-    subgraph "Backend (NestJS)"
-        Gateway["🔌 WebSocket Gateway<br/>Real-time Events"]
-
-        subgraph "Core Modules"
-            AppModule["🏠 App Module<br/>Root Module"]
-            UsersModule["👥 Users Module<br/>User Management"]
-            ProjectsModule["📁 Projects Module<br/>Project CRUD"]
-        end
-
-        subgraph "AI Services"
-            OpenAIModule["🤖 OpenAI Module<br/>• Chat Completions<br/>• Function Calling<br/>• Image Generation"]
-            VideoModule["🎬 Video Module<br/>Placeholder Video Gen"]
-            ToolsModule["🛠️ Tools Module<br/>Utility Functions"]
-        end
-
-        subgraph "External Services"
-            CloudinaryModule["☁️ Cloudinary Module<br/>Asset Storage"]
-            PrismaModule["🗄️ Prisma Module<br/>Database ORM"]
-        end
+    subgraph "Backend"
+        Gateway["WebSocket"]
+        Services["Services<br/>• OpenAI<br/>• Users<br/>• Projects"]
+        Prisma["Prisma ORM"]
+        Cloudinary["Cloudinary"]
+        Gateway --> Services --> Prisma & Cloudinary
     end
 
-    subgraph "External APIs"
-        OpenAI["🧠 OpenAI API<br/>• GPT-4 Chat<br/>• DALL-E 3 Images"]
-        Cloudinary["☁️ Cloudinary<br/>Image/Video Storage"]
+    subgraph "External"
+        OpenAI["OpenAI API"]
+        CloudinaryAPI["Cloudinary API"]
     end
 
     subgraph "Database"
-        PostgreSQL["🐘 PostgreSQL<br/>• Users<br/>• Projects<br/>• Conversations<br/>• Elements"]
+        DB["PostgreSQL"]
     end
 
-    subgraph "Infrastructure"
-        Docker["🐳 Docker<br/>PostgreSQL Container"]
+    subgraph "Infra"
+        Docker["Docker"]
     end
 
-    %% Frontend connections
-    UI --> Pages
-    Pages --> Components
-    Components --> SocketClient
-    Components --> AxiosAPI
+    Socket -->|"WebSocket"| Gateway
+    Axios -->|"REST"| Services
+    Services -->|"API"| OpenAI
+    Cloudinary -->|"API"| CloudinaryAPI
+    Prisma -->|"ORM"| DB
+    Docker --> DB
 
-    %% Real-time flow
-    SocketClient -.->|"WebSocket Events"| Gateway
-    Gateway -.->|"Live Updates"| SocketClient
+    classDef frontend fill:#e1f5fe,stroke:#0288d1
+    classDef backend fill:#f3e5f5,stroke:#7b1fa2
+    classDef external fill:#fff3e0,stroke:#f57c00
+    classDef database fill:#e8f5e8,stroke:#388e3c
+    classDef infra fill:#fce4ec,stroke:#d81b60
 
-    %% HTTP API flow
-    AxiosAPI -->|"REST API"| UsersModule
-    AxiosAPI -->|"REST API"| ProjectsModule
-
-    %% Gateway connections
-    Gateway --> OpenAIModule
-
-    %% Module dependencies
-    OpenAIModule --> ProjectsModule
-    OpenAIModule --> CloudinaryModule
-    OpenAIModule --> VideoModule
-    OpenAIModule --> ToolsModule
-    ProjectsModule --> PrismaModule
-    UsersModule --> PrismaModule
-
-    %% External API connections
-    OpenAIModule -->|"API Calls"| OpenAI
-    CloudinaryModule -->|"Upload Assets"| Cloudinary
-
-    %% Database connections
-    PrismaModule -->|"ORM"| PostgreSQL
-
-    %% Infrastructure
-    Docker --> PostgreSQL
-
-    classDef frontend fill:#e1f5fe
-    classDef backend fill:#f3e5f5
-    classDef external fill:#fff3e0
-    classDef database fill:#e8f5e8
-    classDef infrastructure fill:#fce4ec
-
-    class UI,Pages,Components,SocketClient,AxiosAPI frontend
-    class Gateway,AppModule,UsersModule,ProjectsModule,OpenAIModule,VideoModule,ToolsModule,CloudinaryModule,PrismaModule backend
-    class OpenAI,Cloudinary external
-    class PostgreSQL database
-    class Docker infrastructure
+    class UI,Pages,Components,Socket,Axios frontend
+    class Gateway,Services,Prisma,Cloudinary backend
+    class OpenAI,CloudinaryAPI external
+    class DB database
+    class Docker infra
 ```
 
 ## 📋 Technical Stack
